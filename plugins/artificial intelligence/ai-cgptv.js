@@ -1,21 +1,21 @@
 exports.run = {
-	usage: ['test'],
-	async: async (m, { client, text, command, ctx, Func, Scraper }) => {
+	usage: ['black'],
+	use: 'text',
+	category: 'artificial intelligence',
+	async: async (m, { client, text, isPrefix, command, Func }) => {
 		try {
 			if (!text) return client.reply(m.chat, Func.example(isPrefix, command, 'berapa anak saya nanti?'), m);
 			client.sendReact(m.chat, '🕒', m.key);
 			let json = await Func.fetchJson(`https://aemt.me/gpt4?text=${text}`);
-			if (json.status) return global.erorFitur(json);
+			if (!json.status) return m.reply('ERR');
 			client.reply(m.chat, json.result, m);
-			console.log('RENDERING');
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
 			return client.reply(m.chat, global.status.tryAgain, m);
 		}
 	},
 	error: false,
-	// owner: true,
+	limit: true,
+	// restrict: false,
 	cache: true,
-	restrict: false,
 	location: __filename,
 };
