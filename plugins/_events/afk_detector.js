@@ -1,5 +1,5 @@
 exports.run = {
-	async: async (m, { client, body, users, Func }) => {
+	async: async (m, { message, client, Func }) => {
 		try {
 			let afk = [...new Set([...(m.mentionedJid || []), ...(m.quoted ? [m.quoted.sender] : [])])];
 			for (let jid of afk) {
@@ -17,7 +17,7 @@ exports.run = {
 				}
 			}
 		} catch (e) {
-			return client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	error: false,

@@ -1,5 +1,6 @@
 const { Function: Func, Logs, Scraper, Cooldown, Spam, InvCloud } = new (require('@neoxr/wb'))();
 const env = require('./config.json');
+const { validationUrl, getSizeBuffer } = require('./lib/system/tools');
 const cron = require('node-cron');
 const cache = new (require('node-cache'))({
 	stdTTL: env.cooldown,
@@ -15,6 +16,7 @@ const spam = new Spam({
 
 module.exports = async (client, ctx) => {
 	const { store, m, body, prefix, plugins, commands, args, command, text, prefixes, core } = ctx;
+
 	// const context = m.message[m.mtype] || m.message.viewOnceMessageV2.message[m.mtype]
 	// process.env['E_MSG'] = context.contextInfo ? Number(context.contextInfo.expiration) : 0
 	try {
@@ -42,6 +44,40 @@ module.exports = async (client, ctx) => {
 			banned_times: users.ban_times,
 			simple: false,
 		});
+
+		// cek size overlimit
+		async function osv(dataSize) {
+			// const shorten = (await Scraper.shorten(dataSize)).data.url;
+			const getSize = validationUrl(dataSize) ? await Func.getSize(dataSize) : '-';
+			const messTrue = validationUrl(dataSize) ? `💀 File size (${getSize}) exceeds the maximum limit, download it by yourself via this link:\n\n${(await Scraper.shorten(dataSize)).data.url}` : `💀 File size (${getSize}) exceeds the maximum limit.`;
+			const messFalse = `⚠️ File size (${getSize}), you can only download files dengan batas maksimal ${env.max_upload_free} MB, dan ${env.max_upload} MB untuk pengguna premium.`;
+			const size = Func.sizeLimit(validationUrl(dataSize) ? getSize : getSizeBuffer(dataSize), users.premium ? env.max_upload : env.max_upload_free).oversize;
+			const mess = users.premium ? messTrue : messFalse;
+			return {
+				size,
+				mess,
+			};
+		}
+
+		// mengirim pesan ke owner jika ada eror
+		async function message(message) {
+			let jid = client.decodeJid(m.sender);
+			let groupList = async () =>
+				Object.entries(await client.groupFetchAllParticipating())
+					.slice(0)
+					.map((entry) => entry[1]);
+			let groups = await groupList();
+			let v = groups.find((data) => data.id == m.key.remoteJid);
+			let tkp = v == undefined ? 'Chat Pribadi' : `Grup ${v.subject}`;
+			let finalMessage = `*PESAN ERROR*\n\n`;
+			finalMessage += `◦ *Tkp :* ${tkp}\n`;
+			finalMessage += `◦ *Dari :* @${jid.replace(/@.+/, '')}\n`;
+			finalMessage += `◦ *Pesan Eror :*\n\n${Func.jsonFormat(message)}\n`;
+			client.reply(env.owner + '@s.whatsapp.net', finalMessage, m);
+
+			return client.reply(m.chat, global.status.tryAgain, m);
+		}
+
 		if (!setting.online) client.sendPresenceUpdate('unavailable', m.chat);
 		if (setting.online) {
 			client.sendPresenceUpdate('available', m.chat);
@@ -199,7 +235,7 @@ module.exports = async (client, ctx) => {
 					client.reply(m.chat, global.status.private, m);
 					continue;
 				}
-				cmd.async(m, { client, args, text, isPrefix: prefix, prefixes, command, groupMetadata, participants, users, chats, groupSet, setting, isOwner, isAdmin, isBotAdmin, plugins, blockList, env, ctx, store, Func, Scraper });
+				cmd.async(m, { client, args, text, isPrefix: prefix, prefixes, command, groupMetadata, participants, users, chats, groupSet, setting, isOwner, isAdmin, isBotAdmin, plugins, blockList, env, ctx, store, Func, Scraper, osv, message });
 				break;
 			}
 		} else {
@@ -235,7 +271,7 @@ module.exports = async (client, ctx) => {
 				if (event.admin && !isAdmin) continue;
 				if (event.private && m.isGroup) continue;
 				if (event.download && (!setting.autodownload || (body && env.evaluate_chars.some((v) => body.startsWith(v))))) continue;
-				event.async(m, { client, body, prefixes, groupMetadata, participants, users, chats, groupSet, setting, isOwner, isAdmin, isBotAdmin, plugins, blockList, env, ctx, store, Func, Scraper });
+				event.async(m, { client, body, prefixes, groupMetadata, participants, users, chats, groupSet, setting, isOwner, isAdmin, isBotAdmin, plugins, blockList, env, ctx, store, Func, Scraper, osv, message });
 			}
 		}
 	} catch (e) {

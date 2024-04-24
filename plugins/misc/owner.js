@@ -1,7 +1,7 @@
 exports.run = {
 	usage: ['owner'],
 	category: 'miscs',
-	async: async (m, { client, env, Func }) => {
+	async: async (m, { message, client, env, Func }) => {
 		client.sendContact(
 			m.chat,
 			[

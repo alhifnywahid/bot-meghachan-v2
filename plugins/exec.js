@@ -2,7 +2,7 @@ const { exec } = require('child_process');
 const syntax = require('syntax-error');
 exports.run = {
 	usage: ['=>', '>', '$'],
-	async: async (m, { client, text, command, ctx, Func, Scraper }) => {
+	async: async (m, { message, client, text, command, ctx, Func, Scraper }) => {
 		if (!text) return;
 		if (command == '=>') {
 			try {

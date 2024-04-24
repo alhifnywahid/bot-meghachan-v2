@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['+cmdstic', '-cmdstic'],
 	use: 'text / command',
 	category: 'owner',
-	async: async (m, { client, text, command, Func }) => {
+	async: async (m, { message, client, text, command, Func }) => {
 		if (command == '+cmdstic') {
 			if (!m.quoted || !/webp/.test(m.quoted.mimetype)) return client.reply(m.chat, Func.texted('bold', `🚩 Reply sticker that will be used as sticker command.`), m);
 			if (!text) return client.reply(m.chat, Func.texted('bold', `🚩 Berikan teks atau command.`), m);

@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['profile'],
 	use: 'mention or reply',
 	category: 'user info',
-	async: async (m, { client, text, isPrefix, blockList, env, Func }) => {
+	async: async (m, { message, client, text, isPrefix, blockList, env, Func }) => {
 		let number = isNaN(text) ? (text.startsWith('+') ? text.replace(/[()+\s-]/g, '') : text.split`@`[1]) : text;
 		if (!text && !m.quoted) return client.reply(m.chat, Func.texted('bold', `🚩 Mention or Reply chat target.`), m);
 		if (isNaN(number)) return client.reply(m.chat, Func.texted('bold', `🚩 Invalid number.`), m);

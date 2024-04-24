@@ -3,7 +3,7 @@ exports.run = {
 	hidden: ['s', 'sk', 'stiker', 'sgif'],
 	use: 'query / reply media',
 	category: 'tools & convert',
-	async: async (m, { client, text, isPrefix, command, Func }) => {
+	async: async (m, { message, client, text, isPrefix, command, Func }) => {
 		try {
 			let exif = global.db.setting;
 			if (m.quoted ? m.quoted.message : m.msg.viewOnce) {
@@ -43,9 +43,7 @@ exports.run = {
 				} else client.reply(m.chat, Func.texted('bold', `Stress ??`), m);
 			}
 		} catch (e) {
-			console.log(e);
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

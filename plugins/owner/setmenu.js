@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['setmenu'],
 	use: '(option)',
 	category: 'owner',
-	async: async (m, { client, args, isPrefix, command, setting, Func }) => {
+	async: async (m, { message, client, args, isPrefix, command, setting, Func }) => {
 		try {
 			if (!args || !args[0]) return m.reply(Func.example(isPrefix, command, '2'));
 			if (!['1', '2', '3', '4'].includes(args[0])) return client.reply(m.chat, Func.texted('bold', `🚩 Style not available.`), m);

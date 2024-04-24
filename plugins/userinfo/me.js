@@ -1,7 +1,7 @@
 exports.run = {
 	usage: ['me'],
 	category: 'user info',
-	async: async (m, { client, isPrefix, blockList, env, Func }) => {
+	async: async (m, { message, client, isPrefix, blockList, env, Func }) => {
 		let user = global.db.users.find((v) => v.jid == m.sender);
 		var pic = await Func.fetchBuffer('./media/image/default.jpg');
 		let _own = [...new Set([env.owner, ...global.db.setting.owners])];

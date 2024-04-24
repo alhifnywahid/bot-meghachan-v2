@@ -4,21 +4,20 @@ exports.run = {
 	hidden: ['lagu', 'song'],
 	use: 'query',
 	category: 'download',
-	async: async (m, { client, text, isPrefix, command, users, env, Func, Scraper }) => {
+	async: async (m, { message, client, text, isPrefix, command, osv, Func, Scraper }) => {
 		try {
 			if (!text) return client.reply(m.chat, Func.example(isPrefix, command, 'lathi'), m);
 			client.sendReact(m.chat, '🕒', m.key);
 			const json = await Scraper.play(text);
-			if (!json.status) return client.reply(m.chat, Func.jsonFormat(json), m);
+			if (!json.status) return message(json);
 			let caption = `乂  *Y T - P L A Y*\n\n`;
 			caption += `	◦  *Title* : ${json.title}\n`;
 			caption += `	◦  *Size* : ${json.data.size}\n`;
 			caption += `	◦  *Duration* : ${json.duration}\n`;
 			caption += `	◦  *Bitrate* : ${json.data.quality}\n\n`;
 			caption += global.footer;
-			const chSize = Func.sizeLimit(json.data.size, users.premium ? env.max_upload : env.max_upload_free);
-			const isOver = users.premium ? `💀 File size (${json.data.size}) exceeds the maximum limit.` : `⚠️ File size (${json.data.size}), you can only download files with a maximum size of ${env.max_upload_free} MB and for premium users a maximum of ${env.max_upload} MB.`;
-			if (chSize.oversize) return client.reply(m.chat, isOver, m);
+			const isOver = await osv(json.data.buffer);
+			if (isOver.size) return client.reply(m.chat, isOver.mess, m);
 			client
 				.sendMessageModify(m.chat, caption, m, {
 					largeThumb: true,
@@ -32,8 +31,7 @@ exports.run = {
 					});
 				});
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

@@ -3,7 +3,7 @@ exports.run = {
 	hidden: ['wm'],
 	use: 'packname | author',
 	category: 'tools & convert',
-	async: async (m, { client, text, isPrefix, Func }) => {
+	async: async (m, { message, client, text, isPrefix, Func }) => {
 		try {
 			if (!text) return client.reply(m.chat, Func.texted('bold', `🚩 Give a text to make watermark.`), m);
 			let [packname, ...author] = text.split`|`;
@@ -18,8 +18,7 @@ exports.run = {
 				author: author || '',
 			});
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

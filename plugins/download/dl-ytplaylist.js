@@ -4,7 +4,7 @@ exports.run = {
 	hidden: ['ytplaylist', 'playlist', 'getmp3', 'getmp4'],
 	use: 'link',
 	category: 'download',
-	async: async (m, { client, args, isPrefix, command, users, env, Func, Scraper }) => {
+	async: async (m, { message, client, args, isPrefix, command, osv, env, Func, Scraper }) => {
 		try {
 			client.ytplaylist = client.ytplaylist ? client.ytplaylist : [];
 			if (!args[0]) return client.reply(m.chat, Func.example(isPrefix, command, 'https://www.youtube.com/playlist?list=PLFIM0718LjIW-XBdVOerYgKegBtD6rSfD'), m);
@@ -15,16 +15,15 @@ exports.run = {
 				client.sendReact(m.chat, '🕒', m.key);
 				if (command === 'getmp3') {
 					const json = await Scraper.youtube(check.results[Number(args[0]) - 1]);
-					if (!json.status) return client.reply(m.chat, global.status.tryAgain, m);
+					if (!json.status) return message(json);
 					let caption = `乂  *Y T - P L A Y*\n\n`;
 					caption += `	◦  *Title* : ${json.title}\n`;
 					caption += `	◦  *Size* : ${json.data.size}\n`;
 					caption += `	◦  *Duration* : ${json.duration}\n`;
 					caption += `	◦  *Bitrate* : ${json.data.quality}\n\n`;
 					caption += global.footer;
-					const chSize = Func.sizeLimit(json.data.size, users.premium ? env.max_upload : env.max_upload_free);
-					const isOver = users.premium ? `💀 File size (${json.data.size}) exceeds the maximum limit.` : `⚠️ File size (${json.data.size}), you can only download files with a maximum size of ${env.max_upload_free} MB and for premium users a maximum of ${env.max_upload} MB.`;
-					if (chSize.oversize) return client.reply(m.chat, isOver, m);
+					const isOver = await osv(json.data.buffer);
+					if (isOver.size) return client.reply(m.chat, isOver.mess, m);
 					client
 						.sendMessageModify(m.chat, caption, m, {
 							largeThumb: true,
@@ -39,16 +38,15 @@ exports.run = {
 						});
 				} else if (command === 'getmp4') {
 					const json = await Scraper.youtube(check.results[Number(args[0]) - 1], 'video');
-					if (!json.status) return client.reply(m.chat, global.status.tryAgain, m);
+					if (!json.status) return message(json);
 					let caption = `乂  *Y T - M P 4*\n\n`;
 					caption += `	◦  *Title* : ${json.title}\n`;
 					caption += `	◦  *Size* : ${json.data.size}\n`;
 					caption += `	◦  *Duration* : ${json.duration}\n`;
 					caption += `	◦  *Quality* : ${json.data.quality}\n\n`;
 					caption += global.footer;
-					const chSize = Func.sizeLimit(json.data.size, users.premium ? env.max_upload : env.max_upload_free);
-					const isOver = users.premium ? `💀 File size (${json.data.size}) exceeds the maximum limit.` : `⚠️ File size (${json.data.size}), you can only download files with a maximum size of ${env.max_upload_free} MB and for premium users a maximum of ${env.max_upload} MB.`;
-					if (chSize.oversize) return client.reply(m.chat, isOver, m);
+					const isOver = await osv(json.data.buffer);
+					if (isOver.size) return client.reply(m.chat, isOver.mess, m);
 					let isSize = json.data.size.replace(/MB/g, '').trim();
 					if (isSize > 99)
 						return client
@@ -65,8 +63,8 @@ exports.run = {
 				}
 			} else if (['ytplaylist', 'playlist', 'ytlist'].includes(command)) {
 				client.sendReact(m.chat, '🕒', m.key);
-				const json = await Func.fetchJson(`https://dikaardnt.com/api/youtube/playlist?url=${args[0]}`);
-				if (!json.items) return client.reply(m.chat, global.status.tryAgain, m);
+				const json = await Api.dika.ytPlaylistDl(args[0]);
+				if (!json.items) return message(json);
 				if (!check) {
 					client.ytplaylist.push({
 						jid: m.sender,
@@ -92,8 +90,7 @@ exports.run = {
 				}
 			}, 60_000);
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

@@ -3,7 +3,7 @@ exports.run = {
 	usage: ['qc'],
 	use: 'text',
 	category: 'tools & convert',
-	async: async (m, { client, text, isPrefix, command, Func }) => {
+	async: async (m, { message, client, text, isPrefix, command, Func }) => {
 		try {
 			if (!text) return client.reply(m.chat, Func.example(isPrefix, command, 'Hi!'), m);
 			if (text.length > 30) return client.reply(m.chat, Func.texted('bold', `🚩 Max 30 character.`), m);
@@ -48,8 +48,7 @@ exports.run = {
 				author: exif.sk_author,
 			});
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

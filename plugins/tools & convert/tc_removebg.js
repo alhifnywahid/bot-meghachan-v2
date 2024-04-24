@@ -3,7 +3,7 @@ exports.run = {
 	hidden: ['nobg'],
 	use: 'reply photo',
 	category: 'tools & convert',
-	async: async (m, { client, text, isPrefix, command, Func, Scraper }) => {
+	async: async (m, { message, client, Func, Scraper, osv }) => {
 		try {
 			if (m.quoted ? m.quoted.message : m.msg.viewOnce) {
 				let type = m.quoted ? Object.keys(m.quoted.message)[0] : m.mtype;
@@ -12,8 +12,10 @@ exports.run = {
 					client.sendReact(m.chat, '🕒', m.key);
 					let img = await client.downloadMediaMessage(q);
 					let image = await Scraper.uploadImageV2(img);
-					let json = await Func.fetchJson(`https://aemt.me/removebg?url=${image.data.url}`);
-					if (!json.url) return client.reply(m.chat, global.status.tryAgain, m);
+					let json = await Api.aemt.removeBg(image.data.url);
+					if (json.url.status) return message(json);
+					const isOver = await osv(json.url.result);
+					if (isOver.size) return client.reply(m.chat, isOver.mess, m);
 					client.sendFile(m.chat, json.url.result, '', '', m);
 				} else client.reply(m.chat, Func.texted('bold', `🚩 Only for photo.`), m);
 			} else {
@@ -24,13 +26,14 @@ exports.run = {
 				client.sendReact(m.chat, '🕒', m.key);
 				let img = await q.download();
 				let image = await Scraper.uploadImageV2(img);
-				let json = await Func.fetchJson(`https://aemt.me/removebg?url=${image.data.url}`);
-				if (!json.url) return client.reply(m.chat, global.status.tryAgain, m);
+				let json = await Api.aemt.removeBg(image.data.url);
+				if (json.url.status) return message(json);
+				const isOver = await osv(json.url.result);
+				if (isOver.size) return client.reply(m.chat, isOver.mess, m);
 				client.sendFile(m.chat, json.url.result, '', '', m);
 			}
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

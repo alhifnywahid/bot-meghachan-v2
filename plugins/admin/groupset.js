@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['setdesc', 'setname'],
 	use: 'text',
 	category: 'admin tools',
-	async: async (m, { client, text, isPrefix, command, Func }) => {
+	async: async (m, { message, client, text, isPrefix, command, Func }) => {
 		let value = m.quoted ? m.quoted.text : text;
 		if (command == 'setname') {
 			if (!value) return client.reply(m.chat, Func.example(isPrefix, command, 'CHATBOT'), m);

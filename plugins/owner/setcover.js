@@ -3,7 +3,7 @@ exports.run = {
 	hidden: ['cover'],
 	use: 'reply foto',
 	category: 'owner',
-	async: async (m, { client, Func, Scraper }) => {
+	async: async (m, { message, client, Func, Scraper }) => {
 		let setting = global.db.setting;
 		try {
 			let q = m.quoted ? m.quoted : m;
@@ -17,7 +17,7 @@ exports.run = {
 			setting.cover = link.data.url;
 			client.reply(m.chat, Func.texted('bold', `🚩 Cover successfully set.`), m);
 		} catch (e) {
-			return client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	owner: true,

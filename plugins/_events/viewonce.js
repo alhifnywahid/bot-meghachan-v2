@@ -1,5 +1,5 @@
 exports.run = {
-	async: async (m, { client, body, isOwner, groupSet, Func }) => {
+	async: async (m, { message, client, body, isOwner, groupSet, Func }) => {
 		try {
 			if (m.msg && m.msg.viewOnce && !isOwner && groupSet.viewonce) {
 				let media = await client.downloadMediaMessage(m.msg);
@@ -11,7 +11,7 @@ exports.run = {
 			}
 		} catch (e) {
 			console.log(e);
-			return client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	error: false,

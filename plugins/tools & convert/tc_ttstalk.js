@@ -3,11 +3,11 @@ exports.run = {
 	hidden: ['ttstalk'],
 	use: 'username',
 	category: 'tools & convert',
-	async: async (m, { client, text, isPrefix, command, Func }) => {
+	async: async (m, { message, client, text, isPrefix, command, Func }) => {
 		try {
 			if (!text) return client.reply(m.chat, Func.example(isPrefix, command, 'gopret'), m);
 			client.sendReact(m.chat, '🕒', m.key);
-			let json = await Func.fetchJson(`https://aemt.me/download/tiktokstalk?username=${text}`);
+			let json = await Api.aemt.ttStalk(text);
 			if (json.status) {
 				let output = '*么  T I K T O K - S T A L K*\n\n';
 				output += '*Username* : ' + json.result.username + '\n';
@@ -18,11 +18,10 @@ exports.run = {
 				output += '*Total Postingan* : ' + json.result.totalPosts;
 				client.sendFile(m.chat, json.result.profile, '', output, m);
 			} else {
-				return client.reply(m.chat, global.status.tryAgain, m);
+				return message(json);
 			}
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

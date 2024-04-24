@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['premium'],
 	hidden: ['prem'],
 	category: 'miscs',
-	async: async (m, { client, env, Func }) => {
+	async: async (m, { message, client, env, Func }) => {
 		try {
 			client.sendReact(m.chat, '🕒', m.key);
 			let quotes = '*么 I N F O - P R E M I U M*\n\n';

@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['+toxic', '-toxic'],
 	use: 'word',
 	category: 'owner',
-	async: async (m, { client, args, isPrefix, command, Func }) => {
+	async: async (m, { message, client, args, isPrefix, command, Func }) => {
 		try {
 			if (command == '+toxic') {
 				if (!args || !args[0]) return client.reply(m.chat, Func.example(isPrefix, command, 'fuck'), m);
@@ -29,7 +29,7 @@ exports.run = {
 			}
 		} catch (e) {
 			console.log(e);
-			return client.reply(m.chat, global.status.error, m);
+			return message(e);
 		}
 	},
 	error: false,

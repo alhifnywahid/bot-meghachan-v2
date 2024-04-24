@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['outsider'],
 	use: '(option)',
 	category: 'admin tools',
-	async: async (m, { client, args, isPrefix, command, participants, Func }) => {
+	async: async (m, { message, client, args, isPrefix, command, participants, Func }) => {
 		try {
 			let member = participants
 				.filter((v) => !v.admin)

@@ -2,12 +2,12 @@ exports.run = {
 	usage: ['resep'],
 	use: 'teks',
 	category: 'tools & convert',
-	async: async (m, { client, text, isPrefix, command, Func }) => {
+	async: async (m, { message, client, text, isPrefix, command, Func }) => {
 		try {
 			if (!text) return client.reply(m.chat, Func.example(isPrefix, command, 'nasi goreng'), m);
 			client.sendReact(m.chat, '🕒', m.key);
-			let json = await Func.fetchJson(`https://aemt.me/caribacaresep?query=${text}`);
-			if (!json.hasil) return client.reply(m.chat, global.status.tryAgain, m);
+			let json = await Api.aemt.cariGetResep(text);
+			if (!json.hasil) return message(json);
 			let quotes = `*么  R E S E P - D A P U R*\n\n`;
 			quotes += ' ◦  *Judul* : ' + json.hasil.data.judul + '\n';
 			quotes += ' ◦  *Waktu* : ' + json.hasil.data.waktu_masak + '\n';
@@ -18,8 +18,7 @@ exports.run = {
 			quotes += global.footer;
 			client.sendFile(m.chat, json.hasil.data.thumb, '', quotes, m);
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

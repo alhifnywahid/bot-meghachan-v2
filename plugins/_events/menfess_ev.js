@@ -1,5 +1,5 @@
 exports.run = {
-	async: async (m, { client, body, Func }) => {
+	async: async (m, { message, client, body, Func }) => {
 		try {
 			global.db.menfess = global.db.menfess ? global.db.menfess : {};
 			let mf = Object.values(global.db.menfess).find((v) => !v.status && v.receiver == m.sender);
@@ -14,8 +14,7 @@ exports.run = {
 				});
 			}
 		} catch (e) {
-			console.log(e);
-			return client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	error: false,

@@ -3,7 +3,7 @@ moment.tz.setDefault('Asia/Jakarta').locale('id');
 exports.run = {
 	usage: ['groups'],
 	category: 'miscs',
-	async: async (m, { client, isPrefix, Func }) => {
+	async: async (m, { message, client, isPrefix, Func }) => {
 		let groupList = async () =>
 			Object.entries(await client.groupFetchAllParticipating())
 				.slice(0)

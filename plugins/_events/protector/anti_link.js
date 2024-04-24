@@ -1,5 +1,5 @@
 exports.run = {
-	async: async (m, { client, body, groupSet, isAdmin, Func }) => {
+	async: async (m, { message, client, body, groupSet, isAdmin }) => {
 		try {
 			// delete link then kick when antilink is turned on
 			if (groupSet.antilink && !isAdmin && body) {
@@ -29,7 +29,7 @@ exports.run = {
 					});
 			}
 		} catch (e) {
-			return client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	error: false,

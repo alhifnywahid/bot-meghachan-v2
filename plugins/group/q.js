@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['q'],
 	use: 'reply chat',
 	category: 'group',
-	async: async (m, { client, store }) => {
+	async: async (m, { message, client, store }) => {
 		try {
 			if (!m.quoted) return client.reply(m.chat, Func.texted('bold', `🚩 Reply to message that contain quoted.`), m);
 			const msg = await store.loadMessage(m.chat, m.quoted.id);

@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['sider'],
 	use: '(option)',
 	category: 'admin tools',
-	async: async (m, { client, args, isPrefix, command, participants, isBotAdmin, Func }) => {
+	async: async (m, { message, client, args, isPrefix, command, participants, isBotAdmin, Func }) => {
 		try {
 			let member = participants.filter((u) => u.admin == null).map((u) => u.id);
 			var day = 86400000 * 7,

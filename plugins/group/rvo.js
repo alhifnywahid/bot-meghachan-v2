@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['rvo'],
 	use: 'reply viewonce',
 	category: 'group',
-	async: async (m, { client, Func }) => {
+	async: async (m, { message, client, Func }) => {
 		try {
 			if (!m.quoted) return client.reply(m.chat, Func.texted('bold', `🚩 Reply view once message to use this command.`), m);
 			if (m.quoted.message) {
@@ -17,7 +17,7 @@ exports.run = {
 			} else client.reply(m.chat, Func.texted('bold', `Stress ??`), m);
 		} catch (e) {
 			console.log(e);
-			return client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	error: false,

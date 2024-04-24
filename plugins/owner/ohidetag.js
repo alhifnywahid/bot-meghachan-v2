@@ -3,7 +3,7 @@ exports.run = {
 	hidden: ['o'],
 	use: 'text',
 	category: 'owner',
-	async: async (m, { client, text, participants }) => {
+	async: async (m, { message, client, text, participants }) => {
 		let users = participants.map((u) => u.id);
 		await client.reply(m.chat, text, null, {
 			mentions: users,

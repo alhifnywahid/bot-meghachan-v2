@@ -1,5 +1,5 @@
 exports.run = {
-	async: async (m, { client, Func }) => {
+	async: async (m, { message, Func }) => {
 		try {
 			setInterval(async () => {
 				let day = 86400000 * 3,
@@ -24,7 +24,7 @@ exports.run = {
 					});
 			}, 60_000);
 		} catch (e) {
-			return client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	error: false,

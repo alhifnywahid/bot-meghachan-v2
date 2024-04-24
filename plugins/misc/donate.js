@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['donasi'],
 	hidden: ['donate'],
 	category: 'miscs',
-	async: async (m, { client, env, Func }) => {
+	async: async (m, { message, client, env, Func }) => {
 		client.sendReact(m.chat, '❤️', m.key);
 		let quotes = '*么 D O N A S I - B O T*\n\n';
 		quotes += 'Berapapun donasi mu akan sangat\n';

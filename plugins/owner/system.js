@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['autodownload', 'debug', 'groupmode', 'multiprefix', 'noprefix', 'online', 'self'],
 	use: 'on / off',
 	category: 'owner',
-	async: async (m, { client, args, isPrefix, command, Func }) => {
+	async: async (m, { message, client, args, command, Func }) => {
 		let system = global.db.setting;
 		let type = command.toLowerCase();
 		if (!args || !args[0]) return client.reply(m.chat, `🚩 *Current status* : [ ${system[type] ? 'ON' : 'OFF'} ] (Enter *On* or *Off*)`, m);

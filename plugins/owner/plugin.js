@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['plugen', 'plugdis'],
 	use: 'plugin name',
 	category: 'owner',
-	async: async (m, { client, args, isPrefix, command, plugins: plugs, Func }) => {
+	async: async (m, { message, client, args, isPrefix, command, plugins: plugs, Func }) => {
 		let pluginDisable = global.db.setting.pluginDisable;
 		if (!args || !args[0]) return client.reply(m.chat, Func.example(isPrefix, command, 'tiktok'), m);
 		if (command == 'plugdis') {

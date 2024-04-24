@@ -6,7 +6,7 @@ exports.run = {
 	usage: ['toimg'],
 	use: 'reply sticker',
 	category: 'tools & convert',
-	async: async (m, { client, Func }) => {
+	async: async (m, { message, client, Func }) => {
 		try {
 			if (!m.quoted) return client.reply(m.chat, Func.texted('bold', `🚩 Reply to sticker you want to convert to an image/photo (not supported for sticker animation).`), m);
 			if (m.quoted.mimetype != 'image/webp') return client.reply(m.chat, Func.texted('bold', `🚩 Reply to sticker you want to convert to an image/photo (not supported for sticker animation).`), m);
@@ -21,8 +21,7 @@ exports.run = {
 				remove(isFile);
 			});
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

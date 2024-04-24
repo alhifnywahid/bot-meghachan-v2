@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['disable', 'enable'],
 	use: 'command',
 	category: 'owner',
-	async: async (m, { client, args, isPrefix, command, plugins, Func }) => {
+	async: async (m, { message, client, args, isPrefix, command, plugins, Func }) => {
 		let cmd = global.db.setting;
 		if (!args || !args[0]) return client.reply(m.chat, Func.example(isPrefix, command, 'tiktok'), m);
 		let commands = Func.arrayJoin(Object.values(Object.fromEntries(Object.entries(plugins).filter(([name, prop]) => prop.run.usage))).map((v) => v.run.usage));

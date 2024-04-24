@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['setwm'],
 	use: 'packname | author',
 	category: 'owner',
-	async: async (m, { client, text, isPrefix, command, Func }) => {
+	async: async (m, { message, client, text, isPrefix, command, Func }) => {
 		try {
 			let setting = global.db.setting;
 			if (!text) return client.reply(m.chat, Func.example(isPrefix, command, 'Sticker by | @neoxrs'), m);
@@ -12,7 +12,7 @@ exports.run = {
 			setting.sk_author = author || '';
 			client.reply(m.chat, Func.texted('bold', `🚩 Sticker Watermark successfully set.`), m);
 		} catch (e) {
-			client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	owner: true,

@@ -1,7 +1,7 @@
 exports.run = {
 	usage: ['+hide', '-hide'],
 	category: 'owner',
-	async: async (m, { client, text, prefix, command, setting, ctx, Func }) => {
+	async: async (m, { message, client, text, prefix, command, setting, ctx, Func }) => {
 		try {
 			const categories = [...new Set(Object.values(Object.fromEntries(Object.entries(ctx.plugins).filter(([name, prop]) => prop.run.category))).map((v) => v.run.category))];
 			if (!text) return client.reply(m.chat, Func.example(prefix, command, 'features'), m);
@@ -18,7 +18,7 @@ exports.run = {
 				client.reply(m.chat, Func.texted('bold', `🚩 ${text} category has been removed from hidden list.`), m);
 			}
 		} catch (e) {
-			client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	owner: true,

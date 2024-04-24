@@ -3,7 +3,7 @@ exports.run = {
 	hidden: ['del'],
 	use: 'reply chat',
 	category: 'group',
-	async: async (m, { client, isBotAdmin }) => {
+	async: async (m, { message, client, isBotAdmin }) => {
 		if (!m.quoted) return;
 		client.sendMessage(m.chat, {
 			delete: {

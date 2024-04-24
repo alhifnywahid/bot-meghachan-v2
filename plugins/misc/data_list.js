@@ -1,7 +1,7 @@
 exports.run = {
 	usage: ['listban', 'listprem', 'listblock'],
 	category: 'miscs',
-	async: async (m, { client, command, isOwner, env, blockList, Func }) => {
+	async: async (m, { message, client, command, isOwner, env, blockList, Func }) => {
 		if (command === 'listban') {
 			const data = global.db.users.filter((v) => v.banned);
 			if (data.length < 1) return m.reply(Func.texted('bold', `🚩 Data empty.`));

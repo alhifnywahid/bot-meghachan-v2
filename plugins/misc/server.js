@@ -2,7 +2,7 @@ const os = require('os');
 exports.run = {
 	usage: ['server'],
 	category: 'miscs',
-	async: async (m, { client, setting, Func }) => {
+	async: async (m, { message, client, setting, Func }) => {
 		try {
 			const json = await Func.fetchJson('http://ip-api.com/json');
 			delete json.status;
@@ -20,7 +20,7 @@ exports.run = {
 				thumbnail: setting.cover,
 			});
 		} catch (e) {
-			client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	restrict: false,

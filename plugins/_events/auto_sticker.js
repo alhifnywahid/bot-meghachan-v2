@@ -1,5 +1,5 @@
 exports.run = {
-	async: async (m, { client, body, isOwner, groupSet, setting, Func }) => {
+	async: async (m, { message, client, groupSet, setting }) => {
 		try {
 			if (groupSet.autosticker && /video|image/.test(m.mtype)) {
 				let mime = m.msg.mimetype;
@@ -21,8 +21,7 @@ exports.run = {
 				}
 			}
 		} catch (e) {
-			console.log(e);
-			return client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	error: false,

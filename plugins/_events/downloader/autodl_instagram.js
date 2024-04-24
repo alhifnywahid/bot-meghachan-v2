@@ -1,6 +1,6 @@
 exports.run = {
 	regex: /^(?:https?:\/\/)?(?:www\.)?(?:instagram\.com\/)(?:tv\/|p\/|reel\/)(?:\S+)?$/,
-	async: async (m, { client, body, users, setting, Func }) => {
+	async: async (m, { message, client, body, users, osv, Func }) => {
 		try {
 			const regex = /^(?:https?:\/\/)?(?:www\.)?(?:instagram\.com\/)(?:tv\/|p\/|reel\/)(?:\S+)?$/;
 			const extract = body ? Func.generateLink(body) : null;
@@ -14,11 +14,10 @@ exports.run = {
 						} else return client.reply(m.chat, Func.texted('bold', `🚩 Your limit is not enough to use this feature.`), m);
 					}
 					client.sendReact(m.chat, '🕒', m.key);
-					let old = new Date();
 					Func.hitstat('ig', m.sender);
 					links.map(async (link) => {
-						const json = await Func.fetchJson(`https://dikaardnt.com/api/download/instagram?url=${Func.igFixed(link)}`);
-						if (!Array.isArray(json)) return client.reply(m.chat, Func.jsonFormat(json), m);
+						const json = await Api.dika.igDl(link);
+						if (!Array.isArray(json)) return message(json.status);
 						if (json.length > 1) {
 							let i = 1;
 							for (let data of json) {
@@ -26,14 +25,15 @@ exports.run = {
 								await Func.delay(1500);
 							}
 						} else {
+							const isOver = await osv(json[0]);
+							if (isOver.size) return client.reply(m.chat, isOver.mess, m);
 							client.sendFile(m.chat, json[0], 'mp4', '*么  I G - D O W N L O A D E R*', m);
 						}
 					});
 				}
 			}
 		} catch (e) {
-			client.reply(m.chat, global.status.tryAgain, m);
-			console.log(Func.jsonFormat(e));
+			return message(e);
 		}
 	},
 	restrict: false,

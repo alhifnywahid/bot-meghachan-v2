@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['smeme'],
 	use: 'text | text',
 	category: 'tools & convert',
-	async: async (m, { client, text, isPrefix, command, Func, Scraper }) => {
+	async: async (m, { message, client, text, isPrefix, command, Func, Scraper }) => {
 		try {
 			let exif = global.db.setting;
 			if (!text) return client.reply(m.chat, Func.example(isPrefix, command, 'Hi | Dude'), m);
@@ -34,8 +34,7 @@ exports.run = {
 				});
 			}
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

@@ -5,7 +5,7 @@ const machine = process.env.DATABASE_URL && /mongo/.test(process.env.DATABASE_UR
 exports.run = {
 	usage: ['restart'],
 	category: 'owner',
-	async: async (m, { client, Func }) => {
+	async: async (m, { message, client, Func }) => {
 		await client.reply(m.chat, Func.texted('bold', 'Restarting . . .'), m).then(async () => {
 			await machine.save();
 			process.send('reset');

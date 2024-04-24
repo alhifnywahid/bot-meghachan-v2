@@ -3,16 +3,17 @@ exports.run = {
 	hidden: ['cc'],
 	use: 'url',
 	category: 'download',
-	async: async (m, { client, text, isPrefix, command, Func, args }) => {
+	async: async (m, { message, client, isPrefix, command, Func, args, osv }) => {
 		try {
 			if (!args || !args[0]) return client.reply(m.chat, Func.example(isPrefix, command, 'https://www.capcut.com/t/Zs86uRPs8/'), m);
 			client.sendReact(m.chat, '🕒', m.key);
-			let json = await Func.fetchJson(`https://aemt.me/download/capcut?url=${args[0]}`);
-			if (!json.status) return client.reply(m.chat, global.status.tryAgain, m);
+			let json = await Api.aemt.ccDl(args[0]);
+			if (!json.status) return message(json);
+			const isOver = await osv(json.result.video_ori);
+			if (isOver.size) return client.reply(m.chat, isOver.mess, m);
 			client.sendFile(m.chat, json.result.video_ori, '', '', m);
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

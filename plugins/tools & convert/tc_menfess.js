@@ -3,7 +3,7 @@ exports.run = {
 	hidden: ['menfes', 'confes', 'confess'],
 	use: '628xxx | ayu | i love u',
 	category: 'tools & convert',
-	async: async (m, { client, text, isPrefix, command, Func }) => {
+	async: async (m, { message, client, text, isPrefix, command, Func }) => {
 		global.db.menfess = global.db.menfess ? global.db.menfess : {};
 		if (!text) return client.reply(m.chat, Func.example(isPrefix, command, '628xxxxx | asep | i love u'), m);
 		let [jid, name, msg] = text.split`|`;
@@ -29,8 +29,7 @@ exports.run = {
 			};
 			return !0;
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

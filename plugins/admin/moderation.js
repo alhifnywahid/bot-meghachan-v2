@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['antidelete', 'antilink', 'antivirtex', 'autosticker', 'viewonce', 'left', 'filter', 'localonly', 'welcome'],
 	use: 'on / off',
 	category: 'admin tools',
-	async: async (m, { client, args, isPrefix, command, isBotAdmin, Func }) => {
+	async: async (m, { message, client, args, command, isBotAdmin, Func }) => {
 		try {
 			let setting = global.db.groups.find((v) => v.jid == m.chat);
 			let type = command.toLowerCase();
@@ -16,7 +16,7 @@ exports.run = {
 			setting[type] = status;
 			client.reply(m.chat, Func.texted('bold', `🚩 ${Func.ucword(command)} has been ${option == 'on' ? 'activated' : 'inactivated'} successfully.`), m);
 		} catch (e) {
-			return client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	admin: true,

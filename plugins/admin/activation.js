@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['mute'],
 	use: '0 / 1',
 	category: 'admin tools',
-	async: async (m, { client, args, isPrefix, command, Func }) => {
+	async: async (m, { message, client, args, Func }) => {
 		let gc = global.db.groups.find((v) => v.jid == m.chat);
 		let opt = [0, 1];
 		if (!args || !args[0] || !opt.includes(parseInt(args[0]))) return client.reply(m.chat, `🚩 *Current status* : [ ${gc.mute ? 'True' : 'False'} ] (Enter *1* or *0*)`, m);

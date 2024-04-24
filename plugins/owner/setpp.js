@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['setpp'],
 	use: 'reply photo',
 	category: 'owner',
-	async: async (m, { client, Func, Scraper }) => {
+	async: async (m, { message, client, Func, Scraper }) => {
 		try {
 			let q = m.quoted ? m.quoted : m;
 			let mime = (m.quoted ? m.quoted : m.msg).mimetype || '';
@@ -13,7 +13,7 @@ exports.run = {
 				await Func.delay(3000).then(() => client.reply(m.chat, Func.texted('bold', `🚩 Profile photo has been successfully changed.`), m));
 			} else return client.reply(m.chat, Func.texted('bold', `🚩 Reply to the photo that will be made into the bot's profile photo.`), m);
 		} catch (e) {
-			client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	owner: true,

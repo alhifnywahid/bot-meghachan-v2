@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['zombie'],
 	use: 'reply photo',
 	category: 'tools & convert',
-	async: async (m, { client, isPrefix, command, Func, Scraper }) => {
+	async: async (m, { message, client, isPrefix, command, Func, Scraper }) => {
 		try {
 			if (m.quoted ? m.quoted.message : m.msg.viewOnce) {
 				let type = m.quoted ? Object.keys(m.quoted.message)[0] : m.mtype;
@@ -11,8 +11,8 @@ exports.run = {
 					client.sendReact(m.chat, '🕒', m.key);
 					let img = await client.downloadMediaMessage(q);
 					let image = await Scraper.uploadImageV2(img);
-					let json = await Func.fetchJson(`https://aemt.me/converter/zombie?url=${image.data.url}`);
-					if (!json.status) return client.reply(m.chat, global.status.tryAgain, m);
+					let json = await Api.aemt.zombieEffect(image.data.url);
+					if (!json.status) return message(json);
 					client.sendFile(m.chat, json.url, 'image.jpg', '', m);
 				} else client.reply(m.chat, Func.texted('bold', `🚩 Only for photo.`), m);
 			} else {
@@ -23,13 +23,14 @@ exports.run = {
 				client.sendReact(m.chat, '🕒', m.key);
 				let img = await q.download();
 				let image = await Scraper.uploadImageV2(img);
-				let json = await Func.fetchJson(`https://aemt.me/converter/zombie?url=${image.data.url}`);
-				if (!json.status) return client.reply(m.chat, global.status.tryAgain, m);
+				let json = await Api.aemt.zombieEffect(image.data.url);
+				if (!json.status) return message(json);
+				const isOver = await osv(json.url);
+				if (isOver.size) return client.reply(m.chat, isOver.mess, m);
 				client.sendFile(m.chat, json.url, 'image.jpg', '', m);
 			}
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

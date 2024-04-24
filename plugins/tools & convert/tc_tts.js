@@ -6,7 +6,7 @@ exports.run = {
 	usage: ['tts'],
 	use: 'iso text',
 	category: 'tools & convert',
-	async: async (m, { client, text, isPrefix, command, Func }) => {
+	async: async (m, { message, client, text, isPrefix, command, Func }) => {
 		if (!text) return client.reply(m.chat, Func.example(isPrefix, command, 'id i love you'), m);
 		if (text && m.quoted && m.quoted.text) {
 			let lang = text.slice(0, 2);
@@ -32,8 +32,7 @@ exports.run = {
 					fs.unlinkSync(filePath);
 				});
 			} catch (e) {
-				console.log(e);
-				return client.reply(m.chat, Func.texted('bold', `🚩 Language code not supported.`), m);
+				return message(e);
 			}
 		}
 	},

@@ -5,7 +5,7 @@ exports.run = {
 	hidden: ['get'],
 	use: 'link',
 	category: 'tools & convert',
-	async: async (m, { client, args, text, isPrefix, command, drive, Func }) => {
+	async: async (m, { message, client, args, text, isPrefix, command, drive, Func }) => {
 		try {
 			if (!args || !args[0]) return client.reply(m.chat, Func.example(isPrefix, command, global.db.setting.cover), m);
 			client.sendReact(m.chat, '🕒', m.key);
@@ -23,7 +23,7 @@ exports.run = {
 					await Func.delay(1500);
 					try {
 						const retry = await drive.getFile(args[0]);
-						if (!retry.status) return client.reply(m.chat, global.status.fail, m);
+						if (!retry.status) return message(json);
 						let json = await Func.getFile(Buffer.from(retry.data.chunk));
 						let chSize = Func.sizeLimit(json.size, global.max_upload);
 						if (chSize.oversize) return client.reply(m.chat, `💀 Ukuran file (${json.size}) melebihi batas maksimum. Maaf kami tidak dapat mengunggah file.`, m);
@@ -32,7 +32,7 @@ exports.run = {
 						client.reply(m.chat, Func.texted('bold', `🚩 Tidak dapat mengunduh, mungkin akses file bukan untuk umum.`), m);
 					}
 				} else {
-					if (!response.status) return client.reply(m.chat, global.status.fail, m);
+					if (!response.status) return message(json);
 					let json = await Func.getFile(Buffer.from(response.data.chunk));
 					let chSize = Func.sizeLimit(json.size, global.max_upload);
 					if (chSize.oversize) return client.reply(m.chat, `💀 Ukuran file (${json.size}) melebihi batas maksimum. Maaf kami tidak dapat mengunggah file.`, m);
@@ -57,8 +57,7 @@ exports.run = {
 				client.sendFile(m.chat, args[0], '', '', m);
 			}
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

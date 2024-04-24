@@ -8,7 +8,7 @@ exports.run = {
 	hidden: ['toaudio'],
 	use: 'reply media',
 	category: 'tools & convert',
-	async: async (m, { client, command, Func }) => {
+	async: async (m, { message, client, command, Func }) => {
 		try {
 			if (m.quoted && typeof m.quoted.buttons != 'undefined' && typeof m.quoted.videoMessage != 'undefined') {
 				client.sendReact(m.chat, '🕒', m.key);
@@ -70,8 +70,7 @@ exports.run = {
 				}
 			}
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

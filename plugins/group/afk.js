@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['afk'],
 	use: 'reason (optional)',
 	category: 'group',
-	async: async (m, { client, text, Func }) => {
+	async: async (m, { message, client, text, Func }) => {
 		try {
 			let user = global.db.users.find((v) => v.jid == m.sender);
 			user.afk = +new Date();

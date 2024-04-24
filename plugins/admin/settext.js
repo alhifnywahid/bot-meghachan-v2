@@ -3,7 +3,7 @@ exports.run = {
 	hidden: ['setout'],
 	use: 'text',
 	category: 'admin tools',
-	async: async (m, { client, text, isPrefix, command, Func }) => {
+	async: async (m, { message, client, text, isPrefix, command, Func }) => {
 		let setup = global.db.groups.find((v) => v.jid == m.chat);
 		if (command == 'setwelcome') {
 			if (!text) return client.reply(m.chat, formatWel(isPrefix, command), m);

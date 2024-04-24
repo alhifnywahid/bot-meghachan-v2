@@ -4,7 +4,7 @@ exports.run = {
 	usage: ['groupinfo'],
 	hidden: ['gcinfo'],
 	category: 'group',
-	async: async (m, { client, participants, Func }) => {
+	async: async (m, { message, client, participants, Func }) => {
 		try {
 			let setting = global.db.groups.find((v) => v.jid == m.chat);
 			var pic = await Func.fetchBuffer('./media/image/default.jpg');
@@ -42,8 +42,7 @@ exports.run = {
 				});
 			}
 		} catch (e) {
-			console.log(e);
-			client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	group: true,

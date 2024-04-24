@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['swm'],
 	use: 'packname | author',
 	category: 'tools & convert',
-	async: async (m, { client, text, isPrefix, command, Func }) => {
+	async: async (m, { message, client, text, isPrefix, command, Func }) => {
 		try {
 			let [packname, ...author] = text.split`|`;
 			author = (author || []).join`|`;
@@ -43,8 +43,7 @@ exports.run = {
 				} else client.reply(m.chat, `🚩 To create a watermark on sticker reply media photo or video and use this format *${isPrefix + command} packname | author*`, m);
 			}
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

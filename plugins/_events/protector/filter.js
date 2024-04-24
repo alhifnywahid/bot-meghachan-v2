@@ -1,5 +1,5 @@
 exports.run = {
-	async: async (m, { client, body, users, groupSet, setting, isAdmin, isBotAdmin, Func }) => {
+	async: async (m, { message, client, body, groupSet, setting, isAdmin, isBotAdmin, Func }) => {
 		try {
 			if (groupSet.filter && !isAdmin && isBotAdmin && !m.fromMe) {
 				let toxic = setting.toxic;
@@ -33,7 +33,7 @@ exports.run = {
 				}
 			}
 		} catch (e) {
-			return client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	restrict: false,

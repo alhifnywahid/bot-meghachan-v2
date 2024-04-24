@@ -3,7 +3,7 @@ exports.run = {
 	usage: ['botstat'],
 	hidden: ['stat'],
 	category: 'miscs',
-	async: async (m, { client, blockList, setting, Func }) => {
+	async: async (m, { message, client, blockList, setting, Func }) => {
 		try {
 			let users = global.db.users.length;
 			let chats = global.db.chats.filter((v) => v.jid && v.jid.endsWith('.net')).length;
@@ -37,7 +37,7 @@ exports.run = {
 				thumbnail: setting.cover,
 			});
 		} catch (e) {
-			client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	error: false,

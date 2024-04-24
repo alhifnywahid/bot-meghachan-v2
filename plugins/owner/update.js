@@ -2,7 +2,7 @@ const { execSync } = require('child_process');
 exports.run = {
 	usage: ['update'],
 	category: 'owner',
-	async: async (m, { client, Func }) => {
+	async: async (m, { message, client, Func }) => {
 		try {
 			var stdout = execSync('git pull');
 			var output = stdout.toString();
@@ -13,7 +13,7 @@ exports.run = {
 				client.reply(m.chat, `🚩 ${output.trim()}`, m).then(async () => process.send('reset'));
 			} else return client.reply(m.chat, `🚩 ${output.trim()}`, m).then(async () => process.send('reset'));
 		} catch (e) {
-			return client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	owner: true,

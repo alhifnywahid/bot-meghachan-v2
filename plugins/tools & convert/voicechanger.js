@@ -5,7 +5,7 @@ exports.run = {
 	usage: ['bass', 'blown', 'chipmunk', 'deep', 'earrape', 'fast', 'fat', 'nightcore', 'reverse', 'robot', 'slow', 'smooth'],
 	use: 'reply audio',
 	category: 'voice changer',
-	async: async (m, { client, command, Func }) => {
+	async: async (m, { message, client, command, Func }) => {
 		try {
 			if (!m.quoted) return client.reply(m.chat, Func.texted('bold', `🚩 Reply audio to use this command.`), m);
 			let mime = (m.quoted ? m.quoted : m.msg).mimetype || '';
@@ -47,8 +47,7 @@ exports.run = {
 				client.reply(m.chat, Func.texted('bold', `🚩 Reply audio to use this command.`), m);
 			}
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

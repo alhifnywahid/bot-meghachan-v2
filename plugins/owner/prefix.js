@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['prefix', '+prefix', '-prefix'],
 	use: 'symbol',
 	category: 'owner',
-	async: async (m, { client, args, isPrefix, command, Func, env }) => {
+	async: async (m, { message, client, args, isPrefix, command, Func, env }) => {
 		let system = global.db.setting;
 		if (command == 'prefix') {
 			if (!args || !args[0]) return client.reply(m.chat, Func.example(isPrefix, command, '#'), m);

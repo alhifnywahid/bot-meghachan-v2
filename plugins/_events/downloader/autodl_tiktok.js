@@ -1,6 +1,6 @@
 exports.run = {
 	regex: /^(?:https?:\/\/)?(?:www\.|vt\.|vm\.|t\.)?(?:tiktok\.com\/)(?:\S+)?$/,
-	async: async (m, { client, body, users, setting, prefixes, Func, isPrem }) => {
+	async: async (m, { message, client, body, users, Func, osv }) => {
 		try {
 			const regex = /^(?:https?:\/\/)?(?:www\.|vt\.|vm\.|t\.)?(?:tiktok\.com\/)(?:\S+)?$/;
 			const extract = body ? Func.generateLink(body) : null;
@@ -17,8 +17,8 @@ exports.run = {
 					let quotes = '*么  T I K T O K - D O W N L O A D*';
 					Func.hitstat('tiktok', m.sender);
 					links.map(async (link) => {
-						let json = await Func.fetchJson(`https://dikaardnt.com/api/download/tiktok?url=${Func.ttFixed(link)}`);
-						if (!json.create_time) return client.reply(m.chat, global.status.tryAgain, m);
+						let json = await Api.dika.ttDl(link);
+						if (!json.create_time) return message(json);
 						if (json.slide.without_watermark.length !== 0) {
 							let i = 1;
 							for (let p of json.slide.without_watermark) {
@@ -26,14 +26,16 @@ exports.run = {
 								await Func.delay(1500);
 							}
 							return;
+						} else if (json.video) {
+							const isOver = await osv(json.video.url.without_watermark);
+							if (isOver.size) return client.reply(m.chat, isOver.mess, m);
+							client.sendFile(m.chat, json.video.url.without_watermark, 'video.mp4', quotes, m);
 						}
-						if (json.video) return client.sendFile(m.chat, json.video.url.without_watermark, 'video.mp4', quotes, m);
 					});
 				}
 			}
 		} catch (e) {
-			client.reply(m.chat, global.status.tryAgain, m);
-			console.log(Func.jsonFormat(e));
+			return message(e);
 		}
 	},
 	limit: true,

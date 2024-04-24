@@ -3,7 +3,7 @@ moment.tz.setDefault(global.timezone);
 exports.run = {
 	usage: ['couple'],
 	category: 'group',
-	async: async (m, { client, participants }) => {
+	async: async (m, { message, client, participants }) => {
 		let member = participants.map((u) => u.id);
 		let now = new Date() * 1;
 		var tag1 = member[Math.floor(member.length * Math.random())];

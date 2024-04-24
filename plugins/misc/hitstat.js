@@ -3,7 +3,7 @@ moment.tz.setDefault('Asia/Jakarta').locale('id');
 exports.run = {
 	usage: ['hitstat', 'hitdaily'],
 	category: 'miscs',
-	async: async (m, { client, isPrefix, command, setting, Func }) => {
+	async: async (m, { message, client, isPrefix, command, setting, Func }) => {
 		const types = command == 'hitstat' ? global.db.statistic : Object.fromEntries(Object.entries(global.db.statistic).filter(([_, prop]) => moment(prop.lasthit).format('DDMMYY') == moment(new Date()).format('DDMMYY')));
 		let stat = Object.keys(types);
 		if (stat.length == 0) return client.reply(true, Func.texted('bold', `🚩 No command used.`), m);

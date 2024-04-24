@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['bc', 'bcgc'],
 	use: 'text or reply media',
 	category: 'owner',
-	async: async (m, { client, text, command, Func }) => {
+	async: async (m, { message, client, text, command, Func }) => {
 		try {
 			let q = m.quoted ? m.quoted : m;
 			let mime = (q.msg || q).mimetype || '';
@@ -83,7 +83,7 @@ exports.run = {
 				client.reply(m.chat, Func.texted('bold', `🚩 Successfully send broadcast message to ${id.length} ${command == 'bc' ? 'chats' : 'groups'}`), m);
 			} else client.reply(m.chat, Func.texted('bold', `🚩 Media / text not found or media is not supported.`), m);
 		} catch (e) {
-			client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	restrict: false,

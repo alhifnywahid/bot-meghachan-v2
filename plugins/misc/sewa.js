@@ -1,7 +1,7 @@
 exports.run = {
 	usage: ['sewa'],
 	category: 'miscs',
-	async: async (m, { client, env, Func }) => {
+	async: async (m, { message, client, env, Func }) => {
 		try {
 			client.sendReact(m.chat, '🕒', m.key);
 			let quotes = '*么 S E W A  - B O T*\n\n';
@@ -15,7 +15,7 @@ exports.run = {
 			quotes += 'Silahkan hubungi *.owner* untuk melakukan pembelian premium.';
 			client.reply(m.chat, quotes, m);
 		} catch (e) {
-			client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	error: false,

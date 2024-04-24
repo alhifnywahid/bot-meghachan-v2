@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['tolink'],
 	use: 'reply photo',
 	category: 'tools & convert',
-	async: async (m, { client, isPrefix, command, Func, Scraper }) => {
+	async: async (m, { message, client, isPrefix, command, Func, Scraper }) => {
 		try {
 			if (m.quoted ? m.quoted.message : m.msg.viewOnce) {
 				let type = m.quoted ? Object.keys(m.quoted.message)[0] : m.mtype;
@@ -38,8 +38,7 @@ exports.run = {
 				client.reply(m.chat, text, m);
 			}
 		} catch (e) {
-			console.log(Func.jsonFormat(e));
-			return client.reply(m.chat, global.status.tryAgain, m);
+			return message(e);
 		}
 	},
 	error: false,

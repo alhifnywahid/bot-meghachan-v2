@@ -1,7 +1,7 @@
 const fs = require('fs');
 exports.run = {
 	usage: ['menu', 'help', 'command'],
-	async: async (m, { client, text, isPrefix, command, setting, users, plugins, env, Func }) => {
+	async: async (m, { message, client, text, isPrefix, command, setting, users, plugins, env, Func }) => {
 		try {
 			client.menu = client.menu ? client.menu : {};
 			const id = m.chat;
@@ -278,7 +278,7 @@ exports.run = {
 				}
 			}
 		} catch (e) {
-			client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	error: false,

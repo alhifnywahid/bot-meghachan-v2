@@ -2,7 +2,7 @@ exports.run = {
 	usage: ['+owner', '-owner', '-prem', 'block', 'unblock', 'ban', 'unban'],
 	use: 'mention or reply',
 	category: 'owner',
-	async: async (m, { client, text, command, env, Func }) => {
+	async: async (m, { message, client, text, command, env, Func }) => {
 		try {
 			let input = text ? text : m.quoted ? m.quoted.sender : m.mentionedJid.length > 0 ? m.mentioneJid[0] : false;
 			if (!input) return client.reply(m.chat, Func.texted('bold', `🚩 Mention or reply chat target.`), m);
@@ -61,7 +61,7 @@ exports.run = {
 				client.reply(m.chat, `乂  *U N B A N N E D*\n\n*“Succesfully removing @${jid.split`@`[0]} from banned list.”*\n\n*Total : ${banned}*`, m);
 			}
 		} catch (e) {
-			client.reply(m.chat, Func.jsonFormat(e), m);
+			return message(e);
 		}
 	},
 	error: false,
